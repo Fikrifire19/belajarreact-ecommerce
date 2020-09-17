@@ -1,11 +1,8 @@
 {
-  "name": "react",
+  "name": "belajar-react-ecommerce",
   "version": "1.0.0",
-  "description": "React example starter project",
-  "keywords": [
-    "react",
-    "starter"
-  ],
+  "description": "Latihan react js membuat project e-commerce",
+  "keywords": [],
   "main": "src/index.js",
   "dependencies": {
     "react": "16.13.1",
