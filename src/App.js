@@ -8,6 +8,7 @@ import HomepageLayout from "./layouts/HomepageLayout";
 import Homepage from "./pages/homepage/Homepage";
 import Registration from "./pages/registration/registration";
 import Login from "./pages/login/Login";
+import Recovery from "./pages/Recovery/Recovery";
 
 import "./styles.scss";
 
@@ -85,6 +86,14 @@ class App extends React.Component {
                 </MainLayout>
               )
             }
+          />
+          <Route
+            path="/recovery"
+            render={() => (
+              <MainLayout>
+                <Recovery />
+              </MainLayout>
+            )}
           />
         </Switch>
       </div>
