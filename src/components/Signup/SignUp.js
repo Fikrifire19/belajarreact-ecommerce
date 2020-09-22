@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import {withRouter} from 'react-router-dom';
 
 import { auth, handleUserProfile } from "../../firebase/utils";
 
@@ -80,6 +81,7 @@ const SignUp = props => {
         ...initialState
       });*/
       resetForm();
+      props.history.push('/');
     } catch (err) {}
   };
 
@@ -145,4 +147,4 @@ const SignUp = props => {
     );
 }
 
-export default SignUp;
+export default withRouter(SignUp);

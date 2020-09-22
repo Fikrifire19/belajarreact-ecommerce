@@ -18,6 +18,9 @@ const Header = (props) => {
           {currentUser && (
             <ul>
               <li>
+                <Link to="/dashboard">My Account</Link>
+              </li>
+              <li>
                 <span onClick={() => auth.signOut()}>Logout</span>
               </li>
             </ul>

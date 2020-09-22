@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
@@ -49,8 +49,8 @@ const SignIn = props => {
       /*this.setState({
         ...initialState
       });*/
-      setEmail('');
-      setPassword('');
+      resetForm();
+      props.history.push('/');
     } catch (err) {}
   };
 
@@ -93,4 +93,4 @@ const SignIn = props => {
     );
 }
 
-export default SignIn;
+export default withRouter(SignIn);
