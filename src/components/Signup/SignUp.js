@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import { auth, handleUserProfile } from "../../firebase/utils";
 
@@ -8,16 +8,16 @@ import AuthWrapper from "../AuthWrapper/AuthWrapper";
 
 import "./styles.scss";
 
-const initialState = {
+/*const initialState = {
   displayName: "",
   email: "",
   password: "",
   confirmPassword: "",
   errors: []
-};
+};*/
 
-class SignUp extends React.Component {
-  constructor(props) {
+const SignUp = props => {
+  /*constructor(props) {
     super(props);
     this.state = {
       ...initialState
@@ -31,23 +31,40 @@ class SignUp extends React.Component {
     this.setState({
       [name]: value
     });
+  }*/
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState([]);
+
+  const resetForm = () => {
+    setDisplayName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setErrors([]);
   }
 
-  handleFormSubmit = async (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    const {
+    /*const {
       displayName,
       email,
       password,
       confirmPassword,
       errors
-    } = this.state;
+    } = this.state;*/
 
+    setPassword();
+    setConfirmPassword();
+    
     if (password !== confirmPassword) {
       const err = ["Password Don't Match"];
-      this.setState({
+      /*this.setState({
         errors: err
-      });
+      });*/
+      setErrors(err);
       return;
     }
 
@@ -59,24 +76,25 @@ class SignUp extends React.Component {
 
       await handleUserProfile(user, { displayName });
 
-      this.setState({
+      /*this.setState({
         ...initialState
-      });
+      });*/
+      resetForm();
     } catch (err) {}
   };
 
-  render() {
+  
     const configAuthWrapper = {
       headline: "Registration"
     };
 
-    const {
+    /*const {
       displayName,
       email,
       password,
       confirmPassword,
       errors
-    } = this.state;
+    } = this.state;*/
 
     return (
       <AuthWrapper {...configAuthWrapper}>
@@ -88,13 +106,13 @@ class SignUp extends React.Component {
               })}
             </ul>
           )}
-          <form onSubmit={this.handleFormSubmit}>
+          <form onSubmit={handleFormSubmit}>
             <FormInput
               type="text"
               name="displayName"
               value={displayName}
               placeholder="Full Name"
-              onChange={this.handleChange}
+              handleChange={e => setDisplayName(e.target.value)}
             />
 
             <FormInput
@@ -102,7 +120,7 @@ class SignUp extends React.Component {
               name="email"
               value={email}
               placeholder="Email"
-              onChange={this.handleChange}
+              handleChange={e => setEmail(e.target.value)}
             />
 
             <FormInput
@@ -110,7 +128,7 @@ class SignUp extends React.Component {
               name="password"
               value={password}
               placeholder="Password"
-              onChange={this.handleChange}
+              handleChange={e => setPassword(e.target.value)}
             />
 
             <FormInput
@@ -118,14 +136,13 @@ class SignUp extends React.Component {
               name="confirmPassword"
               value={confirmPassword}
               placeholder="Confirm Password"
-              onChange={this.handleChange}
+              handleChange={e => setConfirmPassword(e.target.value)}
             />
             <Button type="submit">Register</Button>
           </form>
         </div>
       </AuthWrapper>
     );
-  }
 }
 
 export default SignUp;
