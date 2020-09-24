@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword, resetAllAuthForms } from "../../redux/User/user.actions";
 
 import "./styles.scss";
 
@@ -7,12 +9,16 @@ import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
 import Button from "../Forms/Button/Button";
 
-import { auth } from "../../firebase/utils";
+//import { auth } from "../../firebase/utils";
 
 /*const initialState = {
   email: "",
   errors: ""
 };*/
+const mapState = ({ user }) => ({
+  resetPasswordSuccess: user.resetPasswordSuccess,
+  resetPasswordError: user.resetPasswordError
+});
 
 const EmailPassword = (props) => {
   /*constructor(props) {
@@ -30,34 +36,28 @@ const EmailPassword = (props) => {
       [name]: value
     });
   }*/
+
+  const { resetPasswordSuccess, resetPasswordError } = useSelector(mapState);
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (resetPasswordSuccess) {
+      dispatch(resetAllAuthForms());
+      props.history.push("/login");
+    }
+  }, [resetPasswordSuccess]);
+
+  useEffect(() => {
+    if (Array.isArray(resetPasswordError) && resetPasswordError.length > 0) {
+      setErrors(resetPasswordError);
+    }
+  }, [resetPasswordError]);
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    try {
-      //const { email } = this.state;
-
-      const config = {
-        url: "http://lvwy9.csb.app/login"
-      };
-
-      await auth
-        .sendPasswordResetEmail(email, config)
-        .then(() => {
-          //console.log('Password Reset');
-          props.history.push("/login");
-        })
-        .catch(() => {
-          //console.log('Something Wrong');
-          const err = ["Email not Found, Please try Again"];
-          //this.setState({ errors: err });
-          setErrors(err);
-        });
-    } catch (err) {}
+    dispatch(resetPassword({ email }));
   };
-
   //const { email, errors } = this.state;
 
   const cinfigAuthWrapper = {

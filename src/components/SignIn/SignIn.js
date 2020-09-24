@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {Link, withRouter} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {signInUser, signInWithGoogle, resetAllAuthForms} from '../../redux/User/user.actions';
 
 import AuthWrapper from "../AuthWrapper/AuthWrapper";
 import FormInput from "../Forms/FormInput/FormInput";
 import Button from "../Forms/Button/Button";
 
-import { auth, signInWithGoogle } from "../../firebase/utils";
+//import { signInWithGoogle } from "../../firebase/utils";
 
 import "./styles.scss";
 
@@ -13,6 +15,10 @@ import "./styles.scss";
   email: "",
   password: ""
 };*/
+
+const mapState = ({user}) => ({
+  signInSuccess: user.signInSuccess
+});
 
 const SignIn = props => {
   /*constructor(props) {
@@ -31,28 +37,35 @@ const SignIn = props => {
     });
   }*/
 
-
+  const {signInSuccess} = useSelector(mapState);
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState();
+
+  useEffect(() => {
+    if(signInSuccess) {
+      resetForm();
+      dispatch(resetAllAuthForms());
+      props.history.push('/');
+    }
+  }, [signInSuccess]);
 
   const resetForm = () => {
     setEmail('');
     setPassword('');
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = /*async*/ e => {
     e.preventDefault();
+    dispatch(signInUser({email, password}));
     //const { email, password } = this.state;
 
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      /*this.setState({
-        ...initialState
-      });*/
-      resetForm();
-      props.history.push('/');
-    } catch (err) {}
+    /**/
   };
+
+  const hadleGoogleSignIn = () => {
+    dispatch(signInWithGoogle);
+  }
 
     const configAuthWrapper = {
       headline: "Login"
@@ -81,7 +94,7 @@ const SignIn = props => {
             <Button type="submit">Login</Button>
             <div className="socialSignin">
               <div className="row">
-                <Button onClick={signInWithGoogle}>Sign in with Google</Button>
+                <Button onClick={hadleGoogleSignIn}>Sign in with Google</Button>
               </div>
             </div>
             <div className="links">
